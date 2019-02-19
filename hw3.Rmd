@@ -1,0 +1,89 @@
+---
+title: "Homework 3"
+author: "Connor Hergenreter"
+date: "February 19, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##Question 1
+
+```{r}
+data(tips, package="reshape2")
+head(tips)
+numParty = nrow(tips)
+numParty
+```
+
+There were 244 parties served.
+
+##Question 2
+
+```{r}
+sapply(tips, class)
+```
+
+Types are numeric, factor, and integer.
+
+##Question 3
+
+```{r}
+day <- tips$day
+dayOrder <- c("Thur", "Fri", "Sat", "Sun")
+day <- day[order(match(day, dayOrder))]
+day
+```
+
+##Question 4
+
+```{r}
+female5 <- subset(tips, sex=="Female" & size >= 5)
+female5
+```
+
+There are three instances that meet the criteria of female with a size greater than or equal to 5.
+
+##Question 5
+
+```{r}
+library(ggplot2)
+ggplot(tips, aes(x=tip, y=total_bill)) + geom_point(shape=1) + geom_smooth(method=lm)
+```
+
+There is a positive linear relationship between tip and total bill according to this chart. Higher tips usually come from higher total bills. Most tips appear to be less than $3.
+##Question 6
+
+```{r}
+tips$tiprate <- tips$tip / tips$total_bill
+mean(tips[["tiprate"]])
+```
+
+The average tiprate is 16.08026%
+
+##Question 7
+
+```{r}
+tips$time <- factor(tips$time, levels = c("Lunch", "Dinner"), ordered = TRUE)
+ggplot(tips, aes(x=time, y=tiprate)) + geom_boxplot(outlier.color="black", outlier.shape=16, outlier.size=3, notch=FALSE) + stat_summary(fun.y=mean, geom="point", shape=23, size=4)
+```
+
+Lunch has a slightly higher tiprate on average. Dinner has some pretty significan outliers. Dinner also has a suprising amount of low tiprates. 
+
+##Question 8
+
+```{r}
+ggplot(tips, aes(x=tip , y=total_bill)) + geom_point(shape=1) + geom_smooth(method=lm) + facet_grid(smoker ~ sex)
+```
+
+The scatterplot grid shows that male non smokers have the highest total bill and tip on average. It appears that non smoking women might tip higher than non smoking men if the total bill were to be high enough following the fitted line. Smokers seem to be a bit more erratic when it comes down to tipping than non smokers.
+
+##Question 9
+
+```{r}
+ggplot(tips, aes(x=day, y=sex, fill=sex)) + geom_bar(stat="identity")
+```
+
+Men pay most often on all four days. It is most likely for a woman to pay on Thursday.
